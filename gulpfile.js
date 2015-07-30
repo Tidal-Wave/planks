@@ -137,6 +137,13 @@ var jsTasks = function(filename) {
     })();
 };
 
+// ### Write to dist
+var writeToDist = function(directory) {
+  return lazypipe()
+    .pipe(gulp.dest, path.dist + directory)
+    .pipe(browserSync.stream, {match: '**/*.{js,css}'})();
+};
+
 // ## Gulp tasks
 // Run `gulp -T` for a task summary
 
@@ -158,6 +165,7 @@ gulp.task('styles', ['wiredep'], function() {
       .pipe(cssTasksInstance));
   });
   return merged
+    .pipe(writeToDist('styles'));
 });
 
 // ### Scripts
@@ -172,6 +180,7 @@ gulp.task('scripts', ['jshint'], function() {
     );
   });
   return merged
+    .pipe(writeToDist('scripts'));
 });
 
 // ### Fonts
