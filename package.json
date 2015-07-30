@@ -1,15 +1,15 @@
 {
-  "name": "sage",
-  "version": "8.2.1",
-  "author": "Ben Word <ben@benword.com>",
-  "homepage": "https://roots.io/sage/",
+  "name": "planks",
+  "version": "1.0.0",
+  "author": "Eric Wafford <ewafford@tidalwaveagency.com>",
+  "homepage": "https://tidalwave.io/planks/",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/roots/sage.git"
+    "url": "git://github.com/tidal-wave/planks.git"
   },
   "bugs": {
-    "url": "https://github.com/roots/sage/issues"
+    "url": "https://github.com/tidal-wave/planks/issues"
   },
   "licenses": [
     {

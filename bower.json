@@ -1,8 +1,8 @@
 {
-  "name": "sage",
-  "homepage": "https://roots.io/sage/",
+  "name": "planks",
+  "homepage": "https://tidalwave.io/planks/",
   "authors": [
-    "Ben Word <ben@benword.com>"
+    "Eric Wafford <ewafford@tidalwaveagency.com>"
   ],
   "license": "MIT",
   "private": true,
