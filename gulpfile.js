@@ -14,7 +14,6 @@ var less         = require('gulp-less');
 var merge        = require('merge-stream');
 var minifyCss    = require('gulp-minify-css');
 var plumber      = require('gulp-plumber');
-var rev          = require('gulp-rev');
 var runSequence  = require('run-sequence');
 var sass         = require('gulp-sass');
 var sourcemaps   = require('gulp-sourcemaps');
@@ -52,8 +51,6 @@ var project = manifest.getProjectGlobs();
 
 // CLI options
 var enabled = {
-  // Enable static asset revisioning when `--production`
-  rev: argv.production,
   // Disable source maps when `--production`
   maps: !argv.production,
   // Fail styles task on error when `--production`
@@ -63,9 +60,6 @@ var enabled = {
   // Strip debug statments from javascript when `--production`
   stripJSDebug: argv.production
 };
-
-// Path to the compiled assets manifest in the dist directory
-var revManifest = path.dist + 'assets.json';
 
 // ## Reusable Pipelines
 // See https://github.com/OverZealous/lazypipe
@@ -112,9 +106,6 @@ var cssTasks = function(filename) {
       rebase: false
     })
     .pipe(function() {
-      return gulpif(enabled.rev, rev());
-    })
-    .pipe(function() {
       return gulpif(enabled.maps, sourcemaps.write('.', {
         sourceRoot: 'assets/styles/'
       }));
@@ -140,27 +131,10 @@ var jsTasks = function(filename) {
       }
     })
     .pipe(function() {
-      return gulpif(enabled.rev, rev());
-    })
-    .pipe(function() {
       return gulpif(enabled.maps, sourcemaps.write('.', {
         sourceRoot: 'assets/scripts/'
       }));
     })();
-};
-
-// ### Write to rev manifest
-// If there are any revved files then write them to the rev manifest.
-// See https://github.com/sindresorhus/gulp-rev
-var writeToManifest = function(directory) {
-  return lazypipe()
-    .pipe(gulp.dest, path.dist + directory)
-    .pipe(browserSync.stream, {match: '**/*.{js,css}'})
-    .pipe(rev.manifest, revManifest, {
-      base: path.dist,
-      merge: true
-    })
-    .pipe(gulp.dest, path.dist)();
 };
 
 // ## Gulp tasks
@@ -184,7 +158,6 @@ gulp.task('styles', ['wiredep'], function() {
       .pipe(cssTasksInstance));
   });
   return merged
-    .pipe(writeToManifest('styles'));
 });
 
 // ### Scripts
@@ -199,7 +172,6 @@ gulp.task('scripts', ['jshint'], function() {
     );
   });
   return merged
-    .pipe(writeToManifest('scripts'));
 });
 
 // ### Fonts
